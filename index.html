@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI ROI Calculator for Property Managers</title>
+</head>
+<body>
+  <h1>AI ROI Calculator</h1>
+  <form action="/.netlify/functions/lead" method="POST">
+    <input name="email" placeholder="Email" required />
+    <input name="firstName" placeholder="First Name" required />
+    <input name="lastName" placeholder="Last Name" required />
+    <input name="company" placeholder="Company" required />
+    <input name="propertyType" placeholder="Property Type" required />
+    <input name="totalUnits" type="number" placeholder="Total Units" required />
+    <input name="avgRent" type="number" placeholder="Average Rent" required />
+    <input name="occupancyRate" type="number" placeholder="Occupancy Rate (%)" required />
+    <input name="staffSize" placeholder="Staff Size" required />
+    <input name="tenantScreening" type="number" placeholder="Tenant Screening Time (hrs)" required />
+    <input name="maintenanceCoordination" type="number" placeholder="Maintenance Coordination (hrs)" required />
+    <input name="rentCollection" type="number" placeholder="Rent Collection (hrs)" required />
+    <input name="leaseManagement" type="number" placeholder="Lease Management (hrs)" required />
+    <input name="tenantCommunication" type="number" placeholder="Tenant Communication (hrs)" required />
+    <input name="reporting" type="number" placeholder="Reporting (hrs)" required />
+    <input name="avgStaffWage" type="number" placeholder="Avg Staff Wage ($/hr)" required />
+    <input name="vacancyDays" type="number" placeholder="Vacancy Days Per Year" required />
+    <input name="latePaymentRate" type="number" placeholder="Late Payment Rate (%)" required />
+    <input name="maintenanceResponseTime" type="number" placeholder="Maintenance Response Time (hrs)" required />
+    <input name="tenantTurnover" type="number" placeholder="Tenant Turnover Rate (%)" required />
+    <input name="screeningCost" type="number" placeholder="Cost Per Screening ($)" required />
+    <input name="utm_source" placeholder="UTM Source" />
+    <input name="utm_medium" placeholder="UTM Medium" />
+    <input name="utm_campaign" placeholder="UTM Campaign" />
+    <input name="utm_content" placeholder="UTM Content" />
+    <input name="referrer" placeholder="Referrer URL" />
+    <button type="submit">Calculate ROI</button>
+  </form>
+</body>
+</html>
