@@ -3,64 +3,73 @@ require("dotenv").config();
 
 exports.handler = async (event) => {
   if (event.httpMethod !== "POST") {
-    return { statusCode: 405, body: "Method Not Allowed" };
+    return {
+      statusCode: 405,
+      body: JSON.stringify({ error: "Method Not Allowed" }),
+    };
   }
 
-  const data = JSON.parse(event.body);
-  const { email, firstName, lastName, company, propertyType, totalUnits, avgRent, occupancyRate, staffSize,
-    tenantScreening, maintenanceCoordination, rentCollection, leaseManagement, tenantCommunication,
-    reporting, avgStaffWage, vacancyDays, latePaymentRate, maintenanceResponseTime, tenantTurnover,
-    screeningCost, utm_source, utm_medium, utm_campaign, utm_content, referrer } = data;
-
-  const laborSavings = avgStaffWage * (tenantScreening + maintenanceCoordination + rentCollection +
-    leaseManagement + tenantCommunication + reporting) * 12;
-  const revenueBoost = Math.round((vacancyDays / 365) * totalUnits * avgRent);
-  const lateRecovered = Math.round((latePaymentRate / 100) * totalUnits * avgRent * 0.5);
-  const roi = (((laborSavings + revenueBoost + lateRecovered) / (totalUnits * screeningCost)) * 100).toFixed(1);
-
-  const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY })
-    .base(process.env.AIRTABLE_BASE_ID);
-
   try {
-    await base(process.env.AIRTABLE_TABLE_NAME).create([
+    const data = JSON.parse(event.body);
+
+    const {
+      email,
+      firstName,
+      lastName,
+      company,
+      businessSize,
+      industry,
+      annualRevenue,
+      avgWage,
+      automationCategories,
+      totalHoursSaved,
+      annualCostSavings,
+      roiPercent,
+      paybackPeriodMonths,
+      RawPayload,
+      utm_source,
+      utm_medium,
+      utm_campaign,
+      utm_content,
+      referrer
+    } = data;
+
+    const base = new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(process.env.AIRTABLE_BASE_ID);
+
+    await base(process.env.AIRTABLE_TABLE_ID).create([
       {
         fields: {
-          Email: email,
+          "Email": email,
           "First Name": firstName,
           "Last Name": lastName,
-          Company: company,
-          "Property Type": propertyType,
-          "Total Units": totalUnits,
-          "Avg Rent": avgRent,
-          "Occupancy Rate": occupancyRate,
-          "Staff Size": staffSize,
-          "Tenant Screening": tenantScreening,
-          "Maintenance Coordination": maintenanceCoordination,
-          "Rent Collection": rentCollection,
-          "Lease Management": leaseManagement,
-          "Tenant Communication": tenantCommunication,
-          Reporting: reporting,
-          "Avg Staff Wage": avgStaffWage,
-          "Vacancy Days": vacancyDays,
-          "Late Payment Rate": latePaymentRate,
-          "Maintenance Response Time": maintenanceResponseTime,
-          "Tenant Turnover": tenantTurnover,
-          "Screening Cost": screeningCost,
-          "Projected Labor Savings": laborSavings,
-          "Projected Revenue Boost": revenueBoost,
-          "Projected Late Recovered": lateRecovered,
-          ROI: parseFloat(roi),
+          "Company": company,
+          "Business Size": businessSize,
+          "Industry": industry,
+          "Annual Revenue": annualRevenue,
+          "Average Wage": avgWage,
+          "Automation Categories": automationCategories.join(", "),
+          "Total Hours Saved": totalHoursSaved,
+          "Annual Cost Savings": annualCostSavings,
+          "ROI (%)": roiPercent,
+          "Payback Period (Months)": paybackPeriodMonths,
+          "Raw Payload": JSON.stringify(RawPayload),
           "utm_source": utm_source,
           "utm_medium": utm_medium,
           "utm_campaign": utm_campaign,
           "utm_content": utm_content,
-          Referrer: referrer,
-          "Raw Payload": JSON.stringify(data)
+          "Referrer": referrer
         },
       },
     ]);
-    return { statusCode: 200, body: JSON.stringify({ success: true, roi }) };
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ success: true }),
+    };
   } catch (err) {
-    return { statusCode: 500, body: JSON.stringify({ error: err.message }) };
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: err.message }),
+    };
   }
 };
